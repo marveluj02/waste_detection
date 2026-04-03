@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <!DOCTYPE html>
 <html>
 <head>
@@ -127,3 +128,92 @@
 
 </body>
 </html>
+=======
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Smart Waste Classifier</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: linear-gradient(135deg, #0f9b8e, #2c5364);
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 0;
+        }
+
+        h1 {
+            margin-top: 40px;
+        }
+
+        .container {
+            background: white;
+            color: black;
+            padding: 30px;
+            margin: 50px auto;
+            width: 350px;
+            border-radius: 15px;
+            box-shadow: 0px 10px 25px rgba(0,0,0,0.2);
+        }
+
+        input[type="file"] {
+            margin: 15px 0;
+        }
+
+        button {
+            background: #0f9b8e;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background: #0c7f75;
+        }
+
+        img {
+            margin-top: 20px;
+            width: 200px;
+            border-radius: 10px;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 18px;
+        }
+
+        .confidence {
+            color: green;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>♻️ Smart Waste Classification System</h1>
+
+    <div class="container">
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" required><br>
+            <button type="submit">Detect Waste</button>
+        </form>
+
+        {% if image_path %}
+            <img src="{{ image_path }}">
+        {% endif %}
+
+        {% if prediction %}
+            <div class="result">
+                <p><strong>Prediction:</strong> {{ prediction }}</p>
+                <p class="confidence"><strong>Confidence:</strong> {{ confidence }}%</p>
+            </div>
+        {% endif %}
+    </div>
+
+</body>
+</html>
+>>>>>>> de32395f59f7cf1500d62dab5c35a184570ba592
