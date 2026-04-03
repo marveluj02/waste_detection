@@ -1,0 +1,17 @@
+<h2>Welcome {{ user }}</h2>
+
+<a href="/logout">Logout</a>
+
+<form method="POST" enctype="multipart/form-data">
+    <input type="file" name="file" required>
+    <button type="submit">Detect</button>
+</form>
+
+{% if image_path %}
+    <img src="{{ image_path }}" width="200">
+{% endif %}
+
+{% if prediction %}
+    <p>Prediction: {{ prediction }}</p>
+    <p>Confidence: {{ confidence }}%</p>
+{% endif %}
