@@ -1,19 +1,38 @@
-<h2>Welcome {{ user }}</h2>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
 
-<a href="/logout">Logout</a>
+<div class="navbar">
+    <div>♻️ Waste Sorting System</div>
+    <div>
+        Welcome {{ user }} |
+        <a href="/logout" style="color:white;">Logout</a>
+    </div>
+</div>
 
-<h3>Upload Waste Image</h3>
+<div class="content">
 
-<form method="POST" enctype="multipart/form-data">
-    <input type="file" name="file" required>
-    <button type="submit">Detect Waste</button>
-</form>
+    <h2>Upload Waste Image</h2>
 
-{% if image_path %}
-    <img src="{{ image_path }}" width="200">
-{% endif %}
+    <form method="POST" enctype="multipart/form-data">
+        <input type="file" name="file" required><br><br>
+        <button type="submit">Detect Waste</button>
+    </form>
 
-{% if prediction %}
-    <p><strong>Prediction:</strong> {{ prediction }}</p>
-    <p><strong>Confidence:</strong> {{ confidence }}%</p>
-{% endif %}
+    {% if image_path %}
+        <img src="{{ image_path }}" width="200">
+    {% endif %}
+
+    {% if prediction %}
+        <h3>Prediction: {{ prediction }}</h3>
+        <p>Confidence: {{ confidence }}%</p>
+    {% endif %}
+
+</div>
+
+</body>
+</html>
