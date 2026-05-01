@@ -87,3 +87,24 @@ input {
     border-radius: 6px;
     border: 1px solid #ccc;
 }
+/* DASHBOARD CARDS */
+.cards {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+/* SMALL CARDS */
+.card.small {
+    flex: 1;
+    text-align: center;
+    background: #ffffff;
+    color: #333;
+}
+
+/* MAIN CARD */
+.main-card {
+    max-width: 600px;
+    margin: auto;
+    text-align: center;
+}
