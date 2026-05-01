@@ -2,7 +2,13 @@ import os
 import cv2
 import numpy as np
 import joblib
+import os
 
+if os.path.exists("waste_model.pkl"):
+    model = joblib.load("waste_model.pkl")
+else:
+    model = None
+    print("Model file not found")
 from flask import Flask, render_template, request, redirect, url_for, session
 
 # ----------------- APP SETUP -----------------
@@ -145,4 +151,4 @@ def pickup():
 # ----------------- RUN APP -----------------
 
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run()
