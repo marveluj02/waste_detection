@@ -24,7 +24,7 @@ if not os.path.exists(UPLOAD_FOLDER):
 
 # Temporary user (you can improve later)
 USER = {
-    "username": "admin",
+    "username": "wastemonger",
     "password": "1234"
 }
 
@@ -42,6 +42,16 @@ def login():
 
     return render_template("login.html")
 
+@app.route('/')
+def home():
+    return render_template('home.html')
+
+@app.route('/contact', methods=["GET", "POST"])
+def contact():
+    if request.method == "POST":
+        return render_template("contact.html", success=True)
+
+    return render_template("contact.html", success=False)
 
 # ----------------- DASHBOARD -----------------
 
@@ -98,7 +108,19 @@ def contact():
 
     return render_template("contact.html")
 
+@app.route('/pickup', methods=["GET", "POST"])
+def pickup():
+    if request.method == "POST":
+        waste_type = request.form.get("waste_type")
+        date = request.form.get("date")
+        time = request.form.get("time")
+        address = request.form.get("address")
 
+        print(waste_type, date, time, address)  # check in terminal
+
+        return render_template("pickup.html", success=True)
+
+    return render_template("pickup.html", success=False)
 # ----------------- LOGOUT -----------------
 
 @app.route("/logout")
