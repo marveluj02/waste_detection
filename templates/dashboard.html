@@ -1,15 +1,26 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dashboard</title>
+    <title>Smart Waste Classification System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+<script>
+document.getElementById("fileInput").addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    const preview = document.getElementById("previewImage");
+
+    if (file) {
+        preview.src = URL.createObjectURL(file);
+        preview.style.display = "block";
+    }
+});
+</script>
 
 <body>
 
 <div class="navbar">
-    <h2>♻ Waste Sorter</h2>
+    <h2><i class="fas fa-recycle"></i> Smart Waste System</h2>
     <div>
         <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
     </div>
@@ -53,7 +64,11 @@
         <h2><i class="fas fa-camera"></i> Detect Waste</h2>
 
         <form method="POST" enctype="multipart/form-data">
-            <input type="file" name="file" required>
+            <input type="file" name="file" id="fileInput" required>
+
+<div class="preview">
+    <img id="previewImage" style="display:none;">
+</div>
             <button type="submit">
                 <i class="fas fa-search"></i> Detect Waste
             </button>
@@ -64,9 +79,11 @@
         {% endif %}
 
         {% if prediction %}
-            <h3>Result: {{ prediction }}</h3>
-            <p>Confidence: {{ confidence }}%</p>
-        {% endif %}
+<div class="result-box">
+    <p>♻ Detected: {{ prediction }}</p>
+    <p>Confidence: {{ confidence }}%</p>
+</div>
+{% endif %}
     </div>
 
 </div>
