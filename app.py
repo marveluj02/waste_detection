@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import joblib
 
-from flask import Flask, render_template, request, redirect, url_for, session
+from flask import Flask, render_template, request, redirect, url_for, session, jsonify
 
 # ----------------- APP SETUP -----------------
 app = Flask(__name__)
@@ -97,6 +97,27 @@ def logout():
     session.pop("user", None)
     return redirect(url_for("login"))
 
+@app.route('/predict_camera', methods=['POST'])
+def predict_camera():
+    import base64
+    import numpy as np
+    import cv2
+
+    data = request.get_json()
+    image_data = data['image']
+
+    # Decode image
+    image_bytes = base64.b64decode(image_data.split(',')[1])
+    np_arr = np.frombuffer(image_bytes, np.uint8)
+    img = cv2.imdecode(np_arr, cv2.IMREAD_COLOR)
+
+    # SAME processing as training
+    img = cv2.resize(img, (64, 64))
+    features = img.flatten().reshape(1, -1)
+
+    prediction = model.predict(features)[0]
+
+    return jsonify({'prediction': prediction})
 
 # ----------------- RUN APP -----------------
 

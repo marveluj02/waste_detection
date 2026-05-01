@@ -17,6 +17,41 @@ document.getElementById("fileInput").addEventListener("change", function(event) 
 });
 </script>
 
+<script>
+let video = document.getElementById("video");
+
+function startCamera() {
+    navigator.mediaDevices.getUserMedia({ video: true })
+        .then(stream => {
+            video.srcObject = stream;
+        });
+}
+
+function captureImage() {
+    let canvas = document.getElementById("canvas");
+    let context = canvas.getContext("2d");
+
+    canvas.width = video.videoWidth;
+    canvas.height = video.videoHeight;
+
+    context.drawImage(video, 0, 0);
+
+    let imageData = canvas.toDataURL("image/png");
+
+    fetch("/predict_camera", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ image: imageData })
+    })
+    .then(res => res.json())
+    .then(data => {
+        document.getElementById("cameraResult").innerText =
+            "Detected: " + data.prediction;
+    });
+}
+</script>
 <body>
 
 <div class="navbar">
@@ -73,6 +108,19 @@ document.getElementById("fileInput").addEventListener("change", function(event) 
                 <i class="fas fa-search"></i> Detect Waste
             </button>
         </form>
+        <hr>
+
+<h3><i class="fas fa-video"></i> Live Camera</h3>
+
+<video id="video" width="300" autoplay></video>
+<br><br>
+
+<button onclick="startCamera()">Start Camera</button>
+<button onclick="captureImage()">Capture</button>
+
+<canvas id="canvas" style="display:none;"></canvas>
+
+<p id="cameraResult"></p>
 
         {% if image_path %}
             <img src="{{ image_path }}" width="200">
