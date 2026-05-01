@@ -1,51 +1,89 @@
-body {
+/* RESET */
+* {
     margin: 0;
+    padding: 0;
+    box-sizing: border-box;
     font-family: 'Poppins', sans-serif;
-    background: linear-gradient(135deg, #0f9b8e, #1abc9c);
-    color: white;
+}
+
+/* BODY */
+body {
+    background: linear-gradient(135deg, #e8f5e9, #c8e6c9);
 }
 
 /* NAVBAR */
 .navbar {
     display: flex;
     justify-content: space-between;
-    padding: 15px 40px;
-    background: rgba(0,0,0,0.2);
+    align-items: center;
+    background: #1b5e20;
+    padding: 15px 30px;
+    color: white;
 }
 
 .navbar h2 {
-    margin: 0;
+    font-weight: 600;
 }
 
 .navbar a {
     color: white;
-    text-decoration: none;
     margin-left: 20px;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+/* LAYOUT */
+.main {
+    display: flex;
+}
+
+/* SIDEBAR */
+.sidebar {
+    width: 220px;
+    height: 100vh;
+    background: #2e7d32;
+    color: white;
+    padding: 20px;
+}
+
+.sidebar a {
+    display: block;
+    color: white;
+    margin: 15px 0;
+    text-decoration: none;
+}
+
+/* CONTENT AREA */
+.content {
+    flex: 1;
+    padding: 40px;
 }
 
 /* CARD */
 .card {
     background: white;
-    color: black;
     padding: 30px;
-    border-radius: 12px;
-    width: 350px;
+    border-radius: 15px;
+    box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+    max-width: 500px;
     margin: auto;
-    margin-top: 80px;
-    text-align: center;
-    box-shadow: 0px 10px 30px rgba(0,0,0,0.2);
 }
 
 /* BUTTON */
 button {
-    background: #1abc9c;
-    border: none;
-    padding: 10px 20px;
+    background: #2e7d32;
     color: white;
+    border: none;
+    padding: 12px 20px;
     border-radius: 8px;
     cursor: pointer;
 }
 
-button:hover {
-    background: #16a085;
+/* INPUT */
+input {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 6px;
+    border: 1px solid #ccc;
 }
