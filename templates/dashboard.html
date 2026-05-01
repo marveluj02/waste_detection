@@ -17,41 +17,6 @@ document.getElementById("fileInput").addEventListener("change", function(event) 
 });
 </script>
 
-<script>
-let video = document.getElementById("video");
-
-function startCamera() {
-    navigator.mediaDevices.getUserMedia({ video: true })
-        .then(stream => {
-            video.srcObject = stream;
-        });
-}
-
-function captureImage() {
-    let canvas = document.getElementById("canvas");
-    let context = canvas.getContext("2d");
-
-    canvas.width = video.videoWidth;
-    canvas.height = video.videoHeight;
-
-    context.drawImage(video, 0, 0);
-
-    let imageData = canvas.toDataURL("image/png");
-
-    fetch("/predict_camera", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({ image: imageData })
-    })
-    .then(res => res.json())
-    .then(data => {
-        document.getElementById("cameraResult").innerText =
-            "Detected: " + data.prediction;
-    });
-}
-</script>
 <body>
 
 <div class="navbar">
@@ -61,15 +26,17 @@ function captureImage() {
     </div>
 </div>
 
-<div class="main">
+<div class="sidebar">
+    <h3>Menu</h3>
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-        <h3>Menu</h3>
-        <a href="/dashboard"><i class="fas fa-home"></i> Dashboard</a>
-        <a href="/about"><i class="fas fa-info-circle"></i> About</a>
-        <h2><i class="fas fa-phone"></i> Contact Us</h2>
-    </div>
+    <a href="/dashboard"><i class="fas fa-home"></i> Dashboard</a>
+
+    <a href="/about"><i class="fas fa-info-circle"></i> About</a>
+
+    <a href="/contact"><i class="fas fa-phone"></i> Contact</a>
+
+    <a href="/pickup"><i class="fas fa-truck"></i> Schedule Pickup</a>
+</div>
 
     <!-- CONTENT -->
     <div class="content">
@@ -109,18 +76,6 @@ function captureImage() {
             </button>
         </form>
         <hr>
-
-<h3><i class="fas fa-video"></i> Live Camera</h3>
-
-<video id="video" width="300" autoplay></video>
-<br><br>
-
-<button onclick="startCamera()">Start Camera</button>
-<button onclick="captureImage()">Capture</button>
-
-<canvas id="canvas" style="display:none;"></canvas>
-
-<p id="cameraResult"></p>
 
         {% if image_path %}
             <img src="{{ image_path }}" width="200">

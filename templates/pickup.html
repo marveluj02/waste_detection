@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Contact Us</title>
+    <title>Schedule Pickup</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 
@@ -19,17 +19,19 @@
 </div>
 
 <div class="container">
-    <h2>Contact Us</h2>
+    <h2>Schedule Waste Pickup</h2>
 
     <form method="POST">
 
-        <input type="text" name="name" placeholder="Your Name" required>
+        <input type="text" name="waste_type" placeholder="Waste Type (Plastic, Metal...)" required>
 
-        <input type="email" name="email" placeholder="Your Email" required>
+        <input type="date" name="date" required>
 
-        <textarea name="message" placeholder="Your Message" required></textarea>
+        <input type="time" name="time" required>
 
-        <button type="submit">Send Message</button>
+        <input type="text" name="address" placeholder="Pickup Address" required>
+
+        <button type="submit">Schedule Pickup</button>
 
     </form>
 </div>
