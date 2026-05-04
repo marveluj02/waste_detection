@@ -1,20 +1,24 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Waste Sorting System</title>
+    <title>Home - Waste System</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
 
-    <div class="home-container">
-        <h1>Waste Sorting System</h1>
+<div class="navbar">
+    <h2>♻ Smart Waste System</h2>
+    <a href="/dashboard">Dashboard</a>
+</div>
 
-        <div class="center-icon">
-            <img src="https://cdn-icons-png.flaticon.com/512/2909/2909765.png" alt="Recycle Bin">
-        </div>
+<div class="home-hero">
+    <div class="bin">♻</div>
 
-        <a href="/login" class="btn">Get Started</a>
-    </div>
+    <h1>Sort Today, Sustain Tomorrow</h1>
+    <p>Smart waste classification for a cleaner future.</p>
+
+    <a href="/dashboard" class="btn">Start Detecting</a>
+</div>
 
 </body>
 </html>

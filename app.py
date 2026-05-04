@@ -4,36 +4,33 @@ import numpy as np
 import joblib
 from flask import Flask, render_template, request, redirect, url_for, session
 
-# ----------------- APP SETUP -----------------
 app = Flask(__name__)
 app.secret_key = "secret123"
 
-# ----------------- LOAD MODEL SAFELY -----------------
-model = None
-if os.path.exists("waste_model.pkl"):
-    model = joblib.load("waste_model.pkl")
-else:
-    print("Model file not found")
+# ---------------- MODEL ----------------
+MODEL_PATH = "model.pkl"
 
-# ----------------- UPLOAD FOLDER -----------------
+if os.path.exists(MODEL_PATH):
+    model = joblib.load(MODEL_PATH)
+else:
+    model = None
+    print("❌ Model file not found")
+
+# ---------------- UPLOAD FOLDER ----------------
 UPLOAD_FOLDER = "static/uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
-# ----------------- LOGIN SYSTEM -----------------
+# ---------------- USER ----------------
 USER = {
     "username": "wastemonger",
     "password": "1234"
 }
 
-# HOME PAGE
-@app.route("/")
-def root():
-    return redirect(url_for("login"))
-# LOGIN PAGE
-@app.route("/login", methods=["GET", "POST"])
+# ---------------- LOGIN ----------------
+@app.route("/", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form["username"]
@@ -41,13 +38,20 @@ def login():
 
         if username == USER["username"] and password == USER["password"]:
             session["user"] = username
-            return redirect(url_for("dashboard"))
+            return redirect(url_for("home"))
         else:
-            return render_template("login.html", error="Invalid login details")
+            return render_template("login.html", error="Invalid login")
 
     return render_template("login.html")
 
-# ----------------- DASHBOARD -----------------
+# ---------------- HOME ----------------
+@app.route("/home")
+def home():
+    if "user" not in session:
+        return redirect(url_for("login"))
+    return render_template("home.html")
+
+# ---------------- DASHBOARD ----------------
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
     if "user" not in session:
@@ -63,58 +67,49 @@ def dashboard():
             filepath = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
             file.save(filepath)
 
-            img = cv2.imread(filepath)
-            img = cv2.resize(img, (32, 32))
-            img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+            if model is not None:
+                img = cv2.imread(filepath)
+                img = cv2.resize(img, (32, 32))
+                img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
-            features = img.flatten().reshape(1, -1)
-
-            if model:
+                features = img.flatten().reshape(1, -1)
                 prediction = model.predict(features)[0]
             else:
-                prediction = "Plastic (Demo Mode)"
+                prediction = "Model not loaded"
+
             image_path = filepath
 
-    return render_template("dashboard.html", prediction=prediction, image_path=image_path)
+    return render_template("dashboard.html",
+                           prediction=prediction,
+                           image_path=image_path)
 
-# ----------------- OTHER PAGES -----------------
+# ---------------- ABOUT ----------------
 @app.route("/about")
 def about():
     return render_template("about.html")
 
+# ---------------- CONTACT ----------------
 @app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "POST":
-        name = request.form.get("name")
-        email = request.form.get("email")
-        message = request.form.get("message")
-
-        print(name, email, message)
-
         return render_template("contact.html", success=True)
 
     return render_template("contact.html", success=False)
 
+# ---------------- PICKUP ----------------
 @app.route("/pickup", methods=["GET", "POST"])
 def pickup():
     if request.method == "POST":
-        waste_type = request.form.get("waste_type")
-        date = request.form.get("date")
-        time = request.form.get("time")
-        address = request.form.get("address")
-
-        print(waste_type, date, time, address)
-
         return render_template("pickup.html", success=True)
 
     return render_template("pickup.html", success=False)
 
-# ----------------- LOGOUT -----------------
+# ---------------- LOGOUT ----------------
 @app.route("/logout")
 def logout():
     session.pop("user", None)
     return redirect(url_for("login"))
 
-# ----------------- RUN APP -----------------
+# ---------------- RUN ----------------
 if __name__ == "__main__":
-    app.run()
+    app.run(debug=True)

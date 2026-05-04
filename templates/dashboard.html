@@ -1,100 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Smart Waste Classification System</title>
-
+    <title>Dashboard</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
-
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
 
 <body>
 
-<!-- NAVBAR -->
 <div class="navbar">
-    <h2><i class="fas fa-recycle"></i> Smart Waste System</h2>
-    <a href="/logout"><i class="fas fa-sign-out-alt"></i> Logout</a>
+    <h2>♻ Waste System</h2>
+    <a href="/home">Home</a>
+    <a href="/logout">Logout</a>
 </div>
 
-<!-- MAIN LAYOUT -->
-<div class="main-container">
+<div class="center-container">
 
-    <!-- SIDEBAR -->
-    <div class="sidebar">
-        <h3>Menu</h3>
+    <div class="card">
+        <h2>Detect Waste</h2>
 
-        <a href="/dashboard"><i class="fas fa-home"></i> Dashboard</a>
-        <a href="/about"><i class="fas fa-info-circle"></i> About</a>
-        <a href="/contact"><i class="fas fa-phone"></i> Contact</a>
-        <a href="/pickup"><i class="fas fa-truck"></i> Schedule Pickup</a>
+        <form method="POST" enctype="multipart/form-data">
+            <input type="file" name="file" required>
+            <button type="submit">Detect</button>
+        </form>
+
+        {% if image_path %}
+            <img src="{{ image_path }}" class="preview-img">
+        {% endif %}
+
+        {% if prediction %}
+            <div class="result">
+                Detected: {{ prediction }}
+            </div>
+        {% endif %}
     </div>
 
-    <!-- CONTENT -->
-    <div class="content">
-
-        <!-- DASHBOARD CARDS -->
-        <div class="cards">
-            <div class="card small">
-                <h3><i class="fas fa-trash"></i> Total Scans</h3>
-                <p>12</p>
-            </div>
-
-            <div class="card small">
-                <h3><i class="fas fa-recycle"></i> Last Result</h3>
-                <p>{{ prediction if prediction else "None" }}</p>
-            </div>
-
-            <div class="card small">
-                <h3><i class="fas fa-chart-line"></i> Accuracy</h3>
-                <p>63%</p>
-            </div>
-        </div>
-
-        <!-- DETECTION SECTION -->
-        <div class="card main-card">
-            <h2><i class="fas fa-camera"></i> Detect Waste</h2>
-
-            <form method="POST" enctype="multipart/form-data">
-                <input type="file" name="file" id="fileInput" required>
-
-                <div class="preview">
-                    <img id="previewImage" style="display:none; max-width: 200px; margin-top: 10px;">
-                </div>
-
-                <button type="submit">
-                    <i class="fas fa-search"></i> Detect Waste
-                </button>
-            </form>
-
-            <hr>
-
-            {% if image_path %}
-                <img src="{{ image_path }}" style="max-width:200px; margin-top:10px;">
-            {% endif %}
-
-            {% if prediction %}
-                <div class="result-box">
-                    <p>♻ Detected: {{ prediction }}</p>
-                </div>
-            {% endif %}
-        </div>
-
-    </div>
 </div>
-
-<!-- SCRIPT (MUST BE AT BOTTOM) -->
-<script>
-document.getElementById("fileInput").addEventListener("change", function(event) {
-    const file = event.target.files[0];
-    const preview = document.getElementById("previewImage");
-
-    if (file) {
-        preview.src = URL.createObjectURL(file);
-        preview.style.display = "block";
-    }
-});
-</script>
 
 </body>
 </html>
