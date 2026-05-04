@@ -52,13 +52,6 @@ def login():
 def home():
     return render_template('home.html')
 
-@app.route('/contact', methods=["GET", "POST"])
-def contact():
-    if request.method == "POST":
-        return render_template("contact.html", success=True)
-
-    return render_template("contact.html", success=False)
-
 # ----------------- DASHBOARD -----------------
 
 @app.route("/dashboard", methods=["GET", "POST"])
