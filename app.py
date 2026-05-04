@@ -30,9 +30,8 @@ USER = {
 
 # HOME PAGE
 @app.route("/")
-def home():
-    return render_template("home.html")
-
+def root():
+    return redirect(url_for("login"))
 # LOGIN PAGE
 @app.route("/login", methods=["GET", "POST"])
 def login():
@@ -73,8 +72,7 @@ def dashboard():
             if model:
                 prediction = model.predict(features)[0]
             else:
-                prediction = "Model not loaded"
-
+                prediction = "Plastic (Demo Mode)"
             image_path = filepath
 
     return render_template("dashboard.html", prediction=prediction, image_path=image_path)

@@ -180,3 +180,26 @@ textarea {
     padding: 25px;
     border-radius: 12px;
 }
+.home-container {
+    text-align: center;
+    padding-top: 50px;
+}
+
+.center-icon {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 60vh;
+}
+
+.center-icon img {
+    width: 180px;
+}
+
+.btn {
+    background: green;
+    color: white;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+}
