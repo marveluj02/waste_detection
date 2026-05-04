@@ -2,39 +2,39 @@ import os
 import cv2
 import numpy as np
 import joblib
-import os
-
-if os.path.exists("waste_model.pkl"):
-    model = joblib.load("waste_model.pkl")
-else:
-    model = None
-    print("Model file not found")
 from flask import Flask, render_template, request, redirect, url_for, session
 
 # ----------------- APP SETUP -----------------
 app = Flask(__name__)
 app.secret_key = "secret123"
 
-# Load trained model
-model = joblib.load("model.pkl")
+# ----------------- LOAD MODEL SAFELY -----------------
+model = None
+if os.path.exists("waste_model.pkl"):
+    model = joblib.load("waste_model.pkl")
+else:
+    print("Model file not found")
 
-# Upload folder
+# ----------------- UPLOAD FOLDER -----------------
 UPLOAD_FOLDER = "static/uploads"
 app.config["UPLOAD_FOLDER"] = UPLOAD_FOLDER
 
-# Create upload folder if it doesn't exist
 if not os.path.exists(UPLOAD_FOLDER):
     os.makedirs(UPLOAD_FOLDER)
 
 # ----------------- LOGIN SYSTEM -----------------
-
-# Temporary user (you can improve later)
 USER = {
     "username": "wastemonger",
     "password": "1234"
 }
 
-@app.route("/", methods=["GET", "POST"])
+# HOME PAGE
+@app.route("/")
+def home():
+    return render_template("home.html")
+
+# LOGIN PAGE
+@app.route("/login", methods=["GET", "POST"])
 def login():
     if request.method == "POST":
         username = request.form["username"]
@@ -48,12 +48,7 @@ def login():
 
     return render_template("login.html")
 
-@app.route('/')
-def home():
-    return render_template('home.html')
-
 # ----------------- DASHBOARD -----------------
-
 @app.route("/dashboard", methods=["GET", "POST"])
 def dashboard():
     if "user" not in session:
@@ -69,32 +64,27 @@ def dashboard():
             filepath = os.path.join(app.config["UPLOAD_FOLDER"], file.filename)
             file.save(filepath)
 
-            # ----------- IMAGE PROCESSING (same as training) -----------
             img = cv2.imread(filepath)
             img = cv2.resize(img, (32, 32))
             img = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
             features = img.flatten().reshape(1, -1)
 
-            prediction = model.predict(features)[0]
+            if model:
+                prediction = model.predict(features)[0]
+            else:
+                prediction = "Model not loaded"
 
             image_path = filepath
 
-    return render_template(
-        "dashboard.html",
-        prediction=prediction,
-        image_path=image_path
-    )
-
+    return render_template("dashboard.html", prediction=prediction, image_path=image_path)
 
 # ----------------- OTHER PAGES -----------------
-
 @app.route("/about")
 def about():
     return render_template("about.html")
 
-
-@app.route('/contact', methods=["GET", "POST"])
+@app.route("/contact", methods=["GET", "POST"])
 def contact():
     if request.method == "POST":
         name = request.form.get("name")
@@ -103,11 +93,11 @@ def contact():
 
         print(name, email, message)
 
-        return redirect(url_for("dashboard"))
+        return render_template("contact.html", success=True)
 
-    return render_template("contact.html")
+    return render_template("contact.html", success=False)
 
-@app.route('/pickup', methods=["GET", "POST"])
+@app.route("/pickup", methods=["GET", "POST"])
 def pickup():
     if request.method == "POST":
         waste_type = request.form.get("waste_type")
@@ -115,33 +105,18 @@ def pickup():
         time = request.form.get("time")
         address = request.form.get("address")
 
-        print(waste_type, date, time, address)  # check in terminal
+        print(waste_type, date, time, address)
 
         return render_template("pickup.html", success=True)
 
     return render_template("pickup.html", success=False)
-# ----------------- LOGOUT -----------------
 
+# ----------------- LOGOUT -----------------
 @app.route("/logout")
 def logout():
     session.pop("user", None)
     return redirect(url_for("login"))
 
-@app.route('/pickup', methods=["GET", "POST"])
-def pickup():
-    if request.method == "POST":
-        waste_type = request.form.get("waste_type")
-        date = request.form.get("date")
-        time = request.form.get("time")
-        address = request.form.get("address")
-
-        print(waste_type, date, time, address)  # for now
-
-        return redirect(url_for("dashboard"))
-
-    return render_template("pickup.html")
-
 # ----------------- RUN APP -----------------
-
 if __name__ == "__main__":
     app.run()
