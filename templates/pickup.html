@@ -8,13 +8,15 @@
 <body>
 
 <div class="navbar">
-    <h2>♻️ Waste Sorting System</h2>
-    <div>
+    <h2><i class="fas fa-recycle"></i> Waste System</h2>
+
+    <div class="nav-links">
+        <a href="/home">Home</a>
         <a href="/dashboard">Dashboard</a>
-        <a href="/about">About</a>
-        <a href="/contact">Contact</a>
         <a href="/pickup">Pickup</a>
-        <a href="/">Logout</a>
+        <a href="/contact">Contact</a>
+        <a href="/about">About</a>
+        <a href="/logout">Logout</a>
     </div>
 </div>
 
@@ -23,17 +25,21 @@
 
     <form method="POST">
 
-        <input type="text" name="waste_type" placeholder="Waste Type (Plastic, Metal...)" required>
+    <label>Waste Type</label>
+    <input type="text" name="waste_type" required>
 
-        <input type="date" name="date" required>
+    <label>Date</label>
+    <input type="date" name="date" required>
 
-        <input type="time" name="time" required>
+    <label>Time</label>
+    <input type="time" name="time" required step="60">
 
-        <input type="text" name="address" placeholder="Pickup Address" required>
+    <label>Address</label>
+    <input type="text" name="address" required>
 
-        <button type="submit">Schedule Pickup</button>
+    <button type="submit">Schedule Pickup</button>
 
-    </form>
+</form>
     {% if success %}
 <div class="success-box">
     ✔ Order completed

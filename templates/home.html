@@ -2,22 +2,44 @@
 <html>
 <head>
     <title>Home - Waste System</title>
+
+    <!-- MOBILE RESPONSIVENESS -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- CSS -->
     <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- ICONS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
+
 <body>
 
+<!-- NAVBAR -->
 <div class="navbar">
-    <h2>♻ Smart Waste System</h2>
-    <a href="/dashboard">Dashboard</a>
+    <h2><i class="fas fa-recycle"></i> Smart Waste System</h2>
+
+    <div class="nav-links">
+        <a href="/home">Home</a>
+        <a href="/dashboard">Dashboard</a>
+        <a href="/pickup">Pickup</a>
+        <a href="/contact">Contact</a>
+        <a href="/about">About</a>
+        <a href="/logout">Logout</a>
+    </div>
 </div>
 
-<div class="home-hero">
-    <div class="bin">♻</div>
+<!-- HERO SECTION -->
+<div class="hero">
+    <i class="fas fa-recycle hero-icon"></i>
 
     <h1>Sort Today, Sustain Tomorrow</h1>
+
     <p>Smart waste classification for a cleaner future.</p>
 
-    <a href="/dashboard" class="btn">Start Detecting</a>
+    <a href="/dashboard">
+        <button class="hero-btn">Start Detecting</button>
+    </a>
 </div>
 
 </body>
